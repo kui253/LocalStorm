@@ -107,12 +107,12 @@ def main(args):
         reranker = RerankerModel(
             model_name_or_path=local_reranker_weights_dir,
             token=access_token,
-            device="cuda:0",
+            device=f"cuda:{args.reranker_device}",
         )
         embedding_model = EmbeddingModel(
             model_name_or_path=local_embedding_model_weights_dir,
             token=access_token,
-            device="cuda:3",
+            device=f"cuda:{args.embedding_model_device}",
         )
         file_manager = FileManager(doc_dir)
         method_statements = file_manager.get_all_files()
@@ -236,6 +236,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--debug",
         action="store_true",
+        help="If True, remove duplicate content from the article.",
+    )
+    parser.add_argument(
+        "--embedding_model_device",
+        default=0,
+        type=int,
+        help="If True, remove duplicate content from the article.",
+    )
+    parser.add_argument(
+        "--reranker_device",
+        default=1,
+        type=int,
         help="If True, remove duplicate content from the article.",
     )
     main(parser.parse_args())
